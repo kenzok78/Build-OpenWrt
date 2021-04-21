@@ -14,8 +14,8 @@
 sed -i 's/192.168.1.1/192.168.3.251/g' package/base-files/files/bin/config_generate
 
 # 修改固件生成名字,增加当天日期
-sed -i 's/IMG_PREFIX:=$(VERSION_DIST_SANITIZED)/IMG_PREFIX:=kenzo-$(shell date +%Y%m%d)-$(VERSION_DIST_SANITIZED)/g' include/image.mk
-
-# 修改版本号
-cid=$(date "+%Y-%m-%d")
-sed -i 's/openwrt/R[${cid}]/g' package/lean/default-settings/files/zzz-default-settings
+sed -i 's/$(VERSION) &&/$(VERSION) ;/g' include/download.mk
+date=`date +%m.%d.%Y`
+sed -i "s/DISTRIB_DESCRIPTION.*/DISTRIB_DESCRIPTION='%D %V %C by kenzo'/g" package/base-files/files/etc/openwrt_release
+sed -i "s/# REVISION:=x/REVISION:= $date/g" include/version.mk
+cp -f banner package/base-files/files/etc/banner
