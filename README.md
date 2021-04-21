@@ -74,11 +74,3 @@
 + Turbo ACC 网络加速
 
 #### 默认后台地址 192.168.3.1, 密码 root
-
-#### Usage
-
-- Sign up for [GitHub Actions](https://github.com/features/actions/signup)
-- Fork [this GitHub repository](https://github.com/kenzok78/OpenWrt)
-- click the `Star` button, and the build will starts automatically.Progress can be viewed on the Actions page.
-- When the build is complete, click the `Artifacts` button in the upper right corner of the Actions page to download the binaries.
-
