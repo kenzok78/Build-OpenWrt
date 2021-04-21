@@ -27,7 +27,7 @@
 [![immortalwrt](https://img.shields.io/badge/immortalwrt-openwrt-orange.svg?style=flat&logo=appveyor)](https://github.com/immortalwrt/immortalwrt) 
 [![Lean](https://img.shields.io/badge/package-Lean-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede) 
 
-#### 固件下载
+#### 固件下载:
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/kenzok78/Build-OpenWrt?style=for-the-badge&label=Download)](https://github.com/kenzok78/Build-OpenWrt/actions)
 
