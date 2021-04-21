@@ -188,17 +188,18 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: steps.tag.outputs.status == 'success' && !cancelled()
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
+        files: "${{ env.FIRMWARE }}/*"
+        name: ${{ env.date2 }} ${{matrix.target}} ${{ env.EMOJI }}
+        tag_name: ${{ env.date }}_${{matrix.target}}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
       with:
-        retain_days: 1
-        keep_minimum_runs: 3
+        retain_days: 5
+        keep_minimum_runs: 0
 
     - name: Remove old Releases
       uses: dev-drprasad/delete-older-releases@v0.1.0
