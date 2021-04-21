@@ -19,4 +19,3 @@ sed -i 's/IMG_PREFIX:=$(VERSION_DIST_SANITIZED)/IMG_PREFIX:=kenzo-$(shell date +
 # 修改版本号
 cid=$(date "+%Y-%m-%d")
 sed -i 's/openwrt/R[${cid}]/g' package/lean/default-settings/files/zzz-default-settings
-sed -i 's/Lienol/R[${cid}]/g'package/default-settings/files/zzz-default-settings
