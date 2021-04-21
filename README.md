@@ -45,11 +45,7 @@
 
 + 持续更新, 每周日零点定时自动云编译更新固件,不用再担心因停更而需更换固件.
 
-后台入口 192.168.3.1 &nbsp;(若后台无法打开,请插拔交换wan,lan网线顺序.)
-
-默认密码 root
-
-第一次使用请采用全新安装,避免出现升级失败以及其他一些可能的Bug.
+#### 关于Secrets 、TOKEN的小知识
 
 云编译需要 [在此](https://github.com/settings/tokens) 创建个token,然后在此仓库Settings->Secrets中添加个名字为REPO_TOKEN的Secret,填入token值,否者无法触发编译
 
@@ -61,7 +57,9 @@ Secrets中添加 TELEGRAM_CHAT_ID, TELEGRAM_TOKEN 可推送编译结果到Telegr
 
 编译触发方式: 
    + 方式1: Actions页面选择 Repo Dispatcher 点击 Run workflow
+   
    + 方式2: 请在支持油猴的浏览器中安装 [脚本](https://greasyfork.org/scripts/407616-github-actions-trigger/code/Github%20Actions%20Trigger.user.js) ,仓库右上角会出现 x86_64 Actions,K2P Actions等按钮,点击对应按钮即可.更多玩法 [repo-dispatcher](https://github.com/tete1030/github-repo-dispatcher)
+
 diy云编译教程: [Read the details in my blog (in Chinese) | 中文教程](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
 
 #### 默认插件包含:
@@ -77,7 +75,7 @@ diy云编译教程: [Read the details in my blog (in Chinese) | 中文教程](ht
 
 #### 默认后台地址 192.168.3.1, 密码 root
 
-### 如何在本地使用此项目编译自己需要的 OpenWrt 固件
+#### 如何在本地使用此项目编译自己需要的 OpenWrt 固件
 
 #### 注意：
 
