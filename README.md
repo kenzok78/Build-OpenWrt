@@ -45,22 +45,20 @@
 
 + 持续更新, 每周日零点定时自动云编译更新固件,不用再担心因停更而需更换固件.
 
-#### 关于Secrets 、TOKEN的小知识
+#### 关于Secrets、TOKEN的小知识
 
-云编译需要 [在此](https://github.com/settings/tokens) 创建个token,然后在此仓库Settings->Secrets中添加个名字为REPO_TOKEN的Secret,填入token值,否者无法触发编译
+* 云编译需要 [在此](https://github.com/settings/tokens) 创建个token,然后在此仓库Settings->Secrets中添加个名字为REPO_TOKEN的Secret,填入token值
 
-在仓库Settings->Secrets中分别添加 PPPOE_USERNAME, PPPOE_PASSWD 可设置默认拨号账号密码.有 [安全隐患](https://github.com/kenzok78/OpenWrt)
+* 在仓库Settings->Secrets中添加 SCKEY 可通过[Server酱](http://sc.ftqq.com) 推送编译结果到微信
 
-Secrets中添加 SCKEY 可通过[Server酱](http://sc.ftqq.com) 推送编译结果到微信
-
-Secrets中添加 TELEGRAM_CHAT_ID, TELEGRAM_TOKEN 可推送编译结果到Telegram Bot. [教程](https://longnight.github.io/2018/12/12/Telegram-Bot-notifications)
+* 在仓库Settings->Secrets中添加 TELEGRAM_CHAT_ID, TELEGRAM_TOKEN 可推送编译结果到Telegram Bot
 
 编译触发方式: 
    + 方式1: Actions页面选择 Repo Dispatcher 点击 Run workflow
    
    + 方式2: 请在支持油猴的浏览器中安装 [脚本](https://greasyfork.org/scripts/407616-github-actions-trigger/code/Github%20Actions%20Trigger.user.js) ,仓库右上角会出现 x86_64 Actions,K2P Actions等按钮,点击对应按钮即可.更多玩法 [repo-dispatcher](https://github.com/tete1030/github-repo-dispatcher)
 
-diy云编译教程: [Read the details in my blog (in Chinese) | 中文教程](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
+p3terx云编译教程: [Read the details in my blog (in Chinese) | 中文教程](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
 
 #### 默认插件包含:
 
@@ -75,14 +73,6 @@ diy云编译教程: [Read the details in my blog (in Chinese) | 中文教程](ht
 
 #### 默认后台地址 192.168.3.1, 密码 root
 
-#### 如何在本地使用此项目编译自己需要的 OpenWrt 固件
-
-#### 注意：
-
-1. **不**要用 **root** 用户 git 和编译！！！
-2. 国内用户编译前请准备好梯子,使用大陆白名单或全局模式
-3. 请使用Ubuntu 64bit，推荐  Ubuntu 18 或 Ubuntu 20
-
 #### Usage
 
 - Sign up for [GitHub Actions](https://github.com/features/actions/signup)
@@ -90,19 +80,3 @@ diy云编译教程: [Read the details in my blog (in Chinese) | 中文教程](ht
 - click the `Star` button, and the build will starts automatically.Progress can be viewed on the Actions page.
 - When the build is complete, click the `Artifacts` button in the upper right corner of the Actions page to download the binaries.
 
-#### Acknowledgments
-- [OpenWrt](https://github.com/openwrt/openwrt)
-- [Lean's OpenWrt](https://github.com/coolsnowwolf/lede)
-- [CTCGFW's Team](https://github.com/immortalwrt/immortalwrt)
-- [Lienol](https://github.com/Lienol/openwrt)
-- [P3TERX](https://github.com/P3TERX/OpenWrt/blob/master/LICENSE)
-- [X-WRT](https://github.com/x-wrt/x-wrt)
-- [upload-release-action](https://github.com/svenstaro/upload-release-action)
-- [Microsoft](https://www.microsoft.com)
-- [Microsoft Azure](https://azure.microsoft.com)
-- [GitHub](https://github.com)
-- [GitHub Actions](https://github.com/features/actions)
-- [tmate](https://github.com/tmate-io/tmate)
-- [mxschmitt/action-tmate](https://github.com/mxschmitt/action-tmate)
-- [csexton/debugger-action](https://github.com/csexton/debugger-action)
-- [Cisco](https://www.cisco.com/)
