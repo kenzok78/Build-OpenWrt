@@ -130,13 +130,31 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd openwrt/bin/targets/*/*
-        rm -rf packages
+        mkdir firmware && find openwrt/bin/targets/*/*/ -maxdepth 1 \
+        -name "*combined*" \
+        -or -name "*sysupgrade*" \
+        -or -name "*armvirt-64-default-rootfs*" \
+        -or -name "sha256sums" \
+        | xargs -i mv -f {} ./firmware/
+        cp openwrt/.config  ./firmware/${{matrix.target}}.config
+        cd firmware
+        echo ${{ env.date4 }} > version.txt
+        mv sha256sums ${{matrix.target}}_sha256sums
+        rename -v "s/^openwrt/${{ env.date3 }}-openwrt/" *
+        rename -v "s/xiaomi_redmi-router/redmi/" *bin
+        rename -v "s/(d-team_|xiaoyu_)//" *bin
+        rename -v "s/friendlyarm_//" *gz
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "::set-output name=status::success"
-
-        
-        
+        Emoji=("🎉" "🤞" "✨" "🎁" "🎈" "🎄" "🎨" "💋" "🍓" "🍕" "🍉" "💐" "🌴" "🚀" "🛸" "🗽" "⛅" "🌈" "🔥" "⛄" "🐶" "🏅" "🦄" "🐤")
+        RANDOM=$$$(date +%s)
+        rand=$[$RANDOM % ${#Emoji[@]}]
+        echo "EMOJI=${Emoji[$rand]}" >> $GITHUB_ENV
+        if [ ${{matrix.target}} == "phicomm-k2p" ]; then
+        echo "NOTICE=刷机时breed里的闪存布局请选择斐讯而非默认的公版" >> $GITHUB_ENV
+        elif [ ${{matrix.target}} == "x86_64" ]; then
+        echo "NOTICE=请分配不少于800M的存储容量" >> $GITHUB_ENV
+        fi
+      
 
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
@@ -167,7 +185,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::${{ env.date3 }}"
+        echo "::set-output name=release_tag::$(date +"%m.%d")"
         touch release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
@@ -180,8 +198,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         files: "${{ env.FIRMWARE }}/*"
-        name: ${{ env.date2 }} ${{matrix.target}} ${{ env.EMOJI }}
-        tag_name: ${{ env.date }}_${{matrix.target}}
+        name: ${{ env.date2 }}
+        tag_name: ${{ env.date3 }}
         body_path: release.txt
 
     - name: Delete workflow runs
