@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: ctc-18.06
+name: ctc-21.02
 
 on:
   repository_dispatch:
