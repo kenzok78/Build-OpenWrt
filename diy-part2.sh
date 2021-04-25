@@ -11,7 +11,7 @@
 #
 
 # Modify default IP
-sed -i 's/192.168.1.1/192.168.3.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.5.1/g' package/base-files/files/bin/config_generate
 
 # 修改固件生成名字,添加编译日期
 sed -i 's/$(VERSION) &&/$(VERSION) ;/g' include/download.mk
