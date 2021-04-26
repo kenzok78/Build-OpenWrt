@@ -14,5 +14,8 @@
 sed -i 's/192.168.1.1/192.168.3.1/g' package/base-files/files/bin/config_generate
 
 # 修改版本号
-cp -f feeds/litte/default-settings package/lean/default-settings/files/zzz-default-settings
+sed -i 's/$(VERSION) &&/$(VERSION) ;/g' include/download.mk
+date=`date +%m.%d`
+sed -i "s/DISTRIB_DESCRIPTION.*/DISTRIB_DESCRIPTION='%D %V %C by kenzo'/g" package/base-files/files/etc/openwrt_release
+sed -i "s/# REVISION:=x/REVISION:= $date/g" include/version.mk
 cp -f feeds/litte/banner package/base-files/files/etc/banner
