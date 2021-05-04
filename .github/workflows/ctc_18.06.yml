@@ -148,7 +148,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: ${{ env.date3 }} $_ctc_18.06
+        name: ${{ env.date3 }} _ctc_18.06
         path: ${{ env.FIRMWARE }}
 
     - name: Upload firmware to cowtransfer
