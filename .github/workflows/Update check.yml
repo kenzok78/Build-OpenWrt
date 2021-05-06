@@ -14,10 +14,13 @@ name: Update Checker
 env:
   REPO_URL_LEDE: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  REPO_URL_SSRPLUS: https://github.com/kenzok8/litte
-  REPO_URL_PASSWALL: https://github.com/kenzok8/small
-  REPO_BRANCH_PASSWALL: main
-
+  REPO_URL_LEDE: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: openwrt-18.06
+  REPO_URL_LEDE: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: openwrt-21.02
+  REPO_URL_LEDE: https://github.com/Lienol/openwrt
+  REPO_BRANCH: 19.07
+  
 on:
   workflow_dispatch:
 #  schedule:
@@ -54,7 +57,7 @@ jobs:
         token: ${{ secrets.REPO_TOKEN }}
         event-type: Source Code Update
         
-  litte_repository:
+  immortalwrt_18.06:
     runs-on: ubuntu-latest
 
     steps:
@@ -80,9 +83,9 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: litte update
+        event-type: immortalwrt_18.06 update
 
-  small_repository:
+  immortalwrt_21.02:
     runs-on: ubuntu-latest
 
     steps:
@@ -108,7 +111,36 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: small update        
+        event-type: immortalwrt_21.02 update
+        
+        
+  Lienol_19.07:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Get Commit Hash
+      id: getHash
+      run: |
+        git clone --depth 1 $REPO_URL_PASSWALL -b $REPO_BRANCH_PASSWALL .
+        echo "::set-output name=commitHash::$(git rev-parse HEAD)"
+    - name: Compare Commit Hash
+      id: cacheHash
+      uses: actions/cache@v2
+      with:
+        path: .commitHash
+        key: HEAD-${{ steps.getHash.outputs.commitHash }}
+
+    - name: Save New Commit Hash
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      run: |
+        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
+    - name: Trigger build
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.REPO_TOKEN }}
+        event-type: Lienol_19.07 update           
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
