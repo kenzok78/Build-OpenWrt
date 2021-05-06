@@ -12,22 +12,18 @@
 name: Update Checker
 
 env:
-  REPO_URL_LEDE: https://github.com/coolsnowwolf/lede
+  REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  REPO_URL_18.06: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH1: openwrt-18.06
-  REPO_URL_21.02: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH2: openwrt-21.02
-  REPO_URL_19.07: https://github.com/Lienol/openwrt
-  REPO_BRANCH3: 19.07
-  
+  REPO_URL_litte: https://github.com/kenzok8/litte
+  REPO_URL_small: https://github.com/kenzok8/small
+
 on:
   workflow_dispatch:
 #  schedule:
 #    - cron: 0 */18 * * *
 
 jobs:
-  coolsnowwolf:
+  LEDE:
     runs-on: ubuntu-latest
 
     steps:
@@ -55,9 +51,10 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: coolsnowwolf Update
+        event-type: LEDE Update
         
-  immortalwrt_18.06:
+        
+  litte:
     runs-on: ubuntu-latest
 
     steps:
@@ -65,8 +62,9 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        git clone --depth 1 $REPO_URL_18.06 -b $REPO_BRANCH1 .
+        git clone --depth 1 $REPO_URL_litte -b $REPO_BRANCH .
         echo "::set-output name=commitHash::$(git rev-parse HEAD)"
+
     - name: Compare Commit Hash
       id: cacheHash
       uses: actions/cache@v2
@@ -78,14 +76,15 @@ jobs:
       if: steps.cacheHash.outputs.cache-hit != 'true'
       run: |
         echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
+
     - name: Trigger build
       if: steps.cacheHash.outputs.cache-hit != 'true'
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: immortalwrt_18.06 update
-
-  immortalwrt_21.02:
+        event-type: litte Update
+        
+  small:
     runs-on: ubuntu-latest
 
     steps:
@@ -93,8 +92,9 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        git clone --depth 1 $REPO_URL_21.02 -b $REPO_BRANCH2 .
+        git clone --depth 1 $REPO_URL_small -b $REPO_BRANCH .
         echo "::set-output name=commitHash::$(git rev-parse HEAD)"
+
     - name: Compare Commit Hash
       id: cacheHash
       uses: actions/cache@v2
@@ -106,41 +106,14 @@ jobs:
       if: steps.cacheHash.outputs.cache-hit != 'true'
       run: |
         echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
+
     - name: Trigger build
       if: steps.cacheHash.outputs.cache-hit != 'true'
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: immortalwrt_21.02 update
-        
-        
-  Lienol_19.07:
-    runs-on: ubuntu-latest
+        event-type: small Update
 
-    steps:
-
-    - name: Get Commit Hash
-      id: getHash
-      run: |
-        git clone --depth 1 $REPO_URL_19.07 -b $REPO_BRANCH3 .
-        echo "::set-output name=commitHash::$(git rev-parse HEAD)"
-    - name: Compare Commit Hash
-      id: cacheHash
-      uses: actions/cache@v2
-      with:
-        path: .commitHash
-        key: HEAD-${{ steps.getHash.outputs.commitHash }}
-
-    - name: Save New Commit Hash
-      if: steps.cacheHash.outputs.cache-hit != 'true'
-      run: |
-        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
-    - name: Trigger build
-      if: steps.cacheHash.outputs.cache-hit != 'true'
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.REPO_TOKEN }}
-        event-type: Lienol_19.07 update           
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
