@@ -12,10 +12,8 @@
 name: Update Checker
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_URL: https://github.com/kenzok8/litte
   REPO_BRANCH: master
-  REPO_URL_litte: https://github.com/kenzok8/litte
-  REPO_URL_small: https://github.com/kenzok8/small
 
 on:
   workflow_dispatch:
@@ -23,7 +21,7 @@ on:
 #    - cron: 0 */18 * * *
 
 jobs:
-  LEDE:
+  litte:
     runs-on: ubuntu-latest
 
     steps:
@@ -51,69 +49,8 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: LEDE Update
-        
-        
-  litte:
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: Get Commit Hash
-      id: getHash
-      run: |
-        git clone --depth 1 $REPO_URL_litte -b $REPO_BRANCH .
-        echo "::set-output name=commitHash::$(git rev-parse HEAD)"
-
-    - name: Compare Commit Hash
-      id: cacheHash
-      uses: actions/cache@v2
-      with:
-        path: .commitHash
-        key: HEAD-${{ steps.getHash.outputs.commitHash }}
-
-    - name: Save New Commit Hash
-      if: steps.cacheHash.outputs.cache-hit != 'true'
-      run: |
-        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
-
-    - name: Trigger build
-      if: steps.cacheHash.outputs.cache-hit != 'true'
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.REPO_TOKEN }}
         event-type: litte Update
-        
-  small:
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: Get Commit Hash
-      id: getHash
-      run: |
-        git clone --depth 1 $REPO_URL_small -b $REPO_BRANCH .
-        echo "::set-output name=commitHash::$(git rev-parse HEAD)"
-
-    - name: Compare Commit Hash
-      id: cacheHash
-      uses: actions/cache@v2
-      with:
-        path: .commitHash
-        key: HEAD-${{ steps.getHash.outputs.commitHash }}
-
-    - name: Save New Commit Hash
-      if: steps.cacheHash.outputs.cache-hit != 'true'
-      run: |
-        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
-
-    - name: Trigger build
-      if: steps.cacheHash.outputs.cache-hit != 'true'
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.REPO_TOKEN }}
-        event-type: small Update
-
+ 
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
