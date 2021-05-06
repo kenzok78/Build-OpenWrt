@@ -12,8 +12,11 @@
 name: Update Checker
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_URL_LEDE: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
+  REPO_URL_SSRPLUS: https://github.com/kenzok8/litte
+  REPO_URL_PASSWALL: https://github.com/kenzok8/small
+  REPO_BRANCH_PASSWALL: main
 
 on:
   workflow_dispatch:
@@ -50,6 +53,62 @@ jobs:
       with:
         token: ${{ secrets.REPO_TOKEN }}
         event-type: Source Code Update
+        
+  litte_repository:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Get Commit Hash
+      id: getHash
+      run: |
+        git clone --depth 1 $REPO_URL_SSRPLUS -b $REPO_BRANCH .
+        echo "::set-output name=commitHash::$(git rev-parse HEAD)"
+    - name: Compare Commit Hash
+      id: cacheHash
+      uses: actions/cache@v2
+      with:
+        path: .commitHash
+        key: HEAD-${{ steps.getHash.outputs.commitHash }}
+
+    - name: Save New Commit Hash
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      run: |
+        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
+    - name: Trigger build
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.RELEASES_TOKEN }}
+        event-type: litte update
+
+  small_repository:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Get Commit Hash
+      id: getHash
+      run: |
+        git clone --depth 1 $REPO_URL_PASSWALL -b $REPO_BRANCH_PASSWALL .
+        echo "::set-output name=commitHash::$(git rev-parse HEAD)"
+    - name: Compare Commit Hash
+      id: cacheHash
+      uses: actions/cache@v2
+      with:
+        path: .commitHash
+        key: HEAD-${{ steps.getHash.outputs.commitHash }}
+
+    - name: Save New Commit Hash
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      run: |
+        echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
+    - name: Trigger build
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.RELEASES_TOKEN }}
+        event-type: small update        
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
