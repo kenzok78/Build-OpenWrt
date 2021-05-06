@@ -24,7 +24,7 @@ on:
 #    - cron: 0 */18 * * *
 
 jobs:
-  check:
+  coolsnowwolf:
     runs-on: ubuntu-latest
 
     steps:
@@ -79,7 +79,7 @@ jobs:
       if: steps.cacheHash.outputs.cache-hit != 'true'
       uses: peter-evans/repository-dispatch@v1
       with:
-        token: ${{ secrets.RELEASES_TOKEN }}
+        token: ${{ secrets.REPO_TOKEN }}
         event-type: litte update
 
   small_repository:
@@ -107,7 +107,7 @@ jobs:
       if: steps.cacheHash.outputs.cache-hit != 'true'
       uses: peter-evans/repository-dispatch@v1
       with:
-        token: ${{ secrets.RELEASES_TOKEN }}
+        token: ${{ secrets.REPO_TOKEN }}
         event-type: small update        
 
     - name: Delete workflow runs
