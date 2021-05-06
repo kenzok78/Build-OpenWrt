@@ -67,12 +67,10 @@
 #### 默认插件包含:
 
 + Opkg 软件包管理
-+ SSR-PLUS
++ ssr-plus
 + openclash
 + passwall
-+ bypass
-+ dnsfilter 基于DNS的广告过滤
 + UPNP 自动端口转发
 + Turbo ACC 网络加速
 
-#### 默认后台地址 192.168.3.1, 密码 root
+#### 默认后台地址 192.168.3.1, 密码 password
