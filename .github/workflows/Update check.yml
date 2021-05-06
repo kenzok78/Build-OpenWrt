@@ -55,7 +55,7 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: Source Code Update
+        event-type: coolsnowwolf Update
         
   immortalwrt_18.06:
     runs-on: ubuntu-latest
