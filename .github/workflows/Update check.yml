@@ -14,11 +14,11 @@ name: Update Checker
 env:
   REPO_URL_LEDE: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  REPO_URL_LEDE: https://github.com/immortalwrt/immortalwrt
+  REPO_URL_18.06: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-18.06
-  REPO_URL_LEDE: https://github.com/immortalwrt/immortalwrt
+  REPO_URL_21.02: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-21.02
-  REPO_URL_LEDE: https://github.com/Lienol/openwrt
+  REPO_URL_19.07: https://github.com/Lienol/openwrt
   REPO_BRANCH: 19.07
   
 on:
@@ -65,7 +65,7 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        git clone --depth 1 $REPO_URL_SSRPLUS -b $REPO_BRANCH .
+        git clone --depth 1 $REPO_URL_18.06 -b $REPO_BRANCH .
         echo "::set-output name=commitHash::$(git rev-parse HEAD)"
     - name: Compare Commit Hash
       id: cacheHash
@@ -93,7 +93,7 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        git clone --depth 1 $REPO_URL_PASSWALL -b $REPO_BRANCH_PASSWALL .
+        git clone --depth 1 $REPO_URL_21.02 -b $REPO_BRANCH .
         echo "::set-output name=commitHash::$(git rev-parse HEAD)"
     - name: Compare Commit Hash
       id: cacheHash
@@ -122,7 +122,7 @@ jobs:
     - name: Get Commit Hash
       id: getHash
       run: |
-        git clone --depth 1 $REPO_URL_PASSWALL -b $REPO_BRANCH_PASSWALL .
+        git clone --depth 1 $REPO_URL_19.07 -b $REPO_BRANCH .
         echo "::set-output name=commitHash::$(git rev-parse HEAD)"
     - name: Compare Commit Hash
       id: cacheHash
