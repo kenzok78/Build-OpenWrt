@@ -24,6 +24,4 @@ date=`date +%m.%d`
 sed -i "s/DISTRIB_DESCRIPTION.*/DISTRIB_DESCRIPTION='%D %V by kenzo'/g" package/base-files/files/etc/openwrt_release
 sed -i "s/# REVISION:=x/REVISION:= $date/g" include/version.mk
 cp -f feeds/litte/commit/banner package/base-files/files/etc/banner
-# 替换默认主题
-sed -i 's#luci-theme-bootstrap#luci-theme-argon#g' feeds/luci/collections/luci/Makefile
-sed -i '/set luci.main.mediaurlbase=\/luci-static\/bootstrap/d' feeds/luci/themes/luci-theme-bootstrap/root/etc/uci-defaults/30_luci-theme-bootstrap
+
