@@ -12,8 +12,8 @@
 name: Update Checker
 
 env:
-  REPO_URL: https://github.com/kenzok8/litte
-  REPO_BRANCH: master
+  REPO_URL: https://github.com/kenzok8/jell
+  REPO_BRANCH: main
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ on:
 #    - cron: 0 */18 * * *
 
 jobs:
-  litte:
+  jell:
     runs-on: ubuntu-latest
 
     steps:
@@ -49,7 +49,7 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: litte Update
+        event-type: jell Update
  
 
     - name: Delete workflow runs
