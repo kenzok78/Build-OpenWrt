@@ -49,7 +49,7 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: jell Update
+        event-type: Update
  
 
     - name: Delete workflow runs
