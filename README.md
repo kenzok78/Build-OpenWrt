@@ -51,7 +51,7 @@
 
 * 云编译需要 [在此](https://github.com/settings/tokens) 创建个token,然后在此仓库Settings->Secrets中添加个名字为REPO_TOKEN的Secret,填入token值
 
-* 在仓库Settings->Secrets中添加 SCKEY 可通过[Server酱](http://sc.ftqq.com) 推送编译结果到微信
+* 在仓库Settings->Secrets中添加 SCKEY 可通过[Server酱](https://sct.ftqq.com/login) 推送编译结果到微信
 
 * 在仓库Settings->Secrets中添加 TELEGRAM_CHAT_ID, TELEGRAM_TOKEN 可推送编译结果到Telegram Bot
 
