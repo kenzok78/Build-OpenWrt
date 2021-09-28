@@ -107,9 +107,9 @@ jobs:
       id: package
       run: |
         cd openwrt
-        cp -f package/small-package/diy/default-settings package/lean/default-settings/files/zzz-default-settings
-        cp -f package/small-package/diy/banner package/base-files/files/etc/banner
-        cp -f package/small-package/diy/Leandiffconfig .config && make defconfig
+        cp -f feeds/small-package/diy/default-settings package/lean/default-settings/files/zzz-default-settings
+        cp -f feeds/small-package/diy/banner package/base-files/files/etc/banner
+        cp -f feeds/small-package/diy/Leandiffconfig .config && make defconfig
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         make download -j8
