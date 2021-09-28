@@ -107,7 +107,11 @@ jobs:
       id: package
       run: |
         cd openwrt
-        make defconfig
+        cp -f feeds/smpackage/diy/default-settings package/lean/default-settings/files/zzz-default-settings
+        cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
+        cp -f feeds/smpackage/diy/ctcdiffconfig .config && make defconfig
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
