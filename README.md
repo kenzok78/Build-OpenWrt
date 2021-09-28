@@ -31,7 +31,7 @@
 
 #### 固件下载:
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/kenzok78/Build-OpenWrt?style=for-the-badge&label=Download)](https://github.com/kenzok78/Build-OpenWrt/releases/latest)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/kenzok78/Build-OpenWrt?style=for-the-badge&label=固件下载)](https://github.com/kenzok78/Build-OpenWrt/releases/latest)
 
 #### 特色:
 
