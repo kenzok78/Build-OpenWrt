@@ -107,9 +107,9 @@ jobs:
       id: package
       run: |
         cd openwrt
-        cp -f package/smpackage/diy/zzz-default-settings package/default-settings/files/zzz-default-settings
-        cp -f package/smpackage/diy/banner package/base-files/files/etc/banner
-        cp -f package/smpackage/diy/Lienoldiffconfig .config && make defconfig
+        cp -f feeds/smpackage/diy/zzz-default-settings package/default-settings/files/zzz-default-settings
+        cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
+        cp -f feeds/smpackage/diy/Lienoldiffconfig .config && make defconfig
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         make download -j8
