@@ -36,7 +36,13 @@ env:
 jobs:
   build:
     runs-on: ubuntu-20.04
-
+    
+    name: Build ${{matrix.target}}
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ["${{ github.event.client_payload.target }}"]
+        
     steps:
     - name: Checkout
       uses: actions/checkout@main
