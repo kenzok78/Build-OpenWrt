@@ -107,9 +107,9 @@ jobs:
       id: package
       run: |
         cd openwrt
-        cp -f package/smpackage/diy/default-settings package/emortal/default-settings/files/zzz-default-settings
-        cp -f package/smpackage/diy/banner package/emortal/default-settings/files/openwrt_banner
-        cp -f package/smpackage/diy/ctcdiffconfig .config && make defconfig 
+        cp -f feeds/smpackage/diy/default-settings package/emortal/default-settings/files/zzz-default-settings
+        cp -f feeds/smpackage/diy/banner package/emortal/default-settings/files/openwrt_banner
+        cp -f feeds/smpackage/diy/ctcdiffconfig .config && make defconfig 
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         make download -j8
