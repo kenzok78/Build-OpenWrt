@@ -17,7 +17,7 @@
 [![GitHub Forks](https://img.shields.io/github/forks/kenzok78/Build-OpenWrt.svg?style=flat-square&label=Forks)](https://github.com/kenzok78/Build-OpenWrt)
 [![PRs Welcome][3]][4]
 [![Issue Welcome][5]][6]
-[!Build-OpenWrt][12]][13]
+[!Build_OpenWrt][12]][13]
 
 <a href="https://t.me/joinchat/JjxmyRZZXJWb74I-sCrryA" target="_blank">Telegram</a>
 
