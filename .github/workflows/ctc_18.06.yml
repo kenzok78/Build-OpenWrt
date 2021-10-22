@@ -113,9 +113,10 @@ jobs:
       id: package
       run: |
         cd openwrt
-        cp -f feeds/smpackage/diy/default-settings package/emortal/default-settings/files/zzz-default-settings
-        cp -f feeds/smpackage/diy/banner package/emortal/default-settings/files/openwrt_banner
-        cp -f feeds/smpackage/diy/ctcdiffconfig .config && make defconfig 
+	git clone https://github.com/kenzok78/jeii package/jeii
+        cp -f package/jeii/commit/default-settings package/emortal/default-settings/files/zzz-default-settings
+        cp -f package/jeii/commit/banner package/emortal/default-settings/files/openwrt_banner
+        cp -f package/jeii/commit/ctcdiffconfig .config && make defconfig
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         make download -j8
