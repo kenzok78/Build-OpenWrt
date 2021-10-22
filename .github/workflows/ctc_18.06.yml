@@ -113,7 +113,7 @@ jobs:
       id: package
       run: |
         cd openwrt
-	git clone https://github.com/kenzok78/jeii package/jeii
+        git clone https://github.com/kenzok78/jeii package/jeii
         cp -f package/jeii/commit/default-settings package/emortal/default-settings/files/zzz-default-settings
         cp -f package/jeii/commit/banner package/emortal/default-settings/files/openwrt_banner
         cp -f package/jeii/commit/ctcdiffconfig .config && make defconfig
