@@ -28,8 +28,8 @@ env:
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
-  UPLOAD_COWTRANSFER: false
-  UPLOAD_WETRANSFER: false
+  UPLOAD_COWTRANSFER: true
+  UPLOAD_WETRANSFER: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
@@ -65,8 +65,9 @@ jobs:
       run: |
         echo "date=$(date +'%m/%d_%Y_%H/%M')" >> $GITHUB_ENV
         echo "date2=$(date +'%m/%d %Y')" >> $GITHUB_ENV
-        echo "date3=$(date +'%m.%d')" >> $GITHUB_ENV
-        echo "date4=$(date +'%m.%d.%Y')" >> $GITHUB_ENV
+        echo "date3=$(date +'%m.%d')" >> $GITHUB_ENV        
+        VERSION="$(echo "${{github.event.action}}" | grep -Eo " [0-9.]+" | sed -e 's/ //')" || true
+        [ "$VERSION" ] && echo "VERSION=$VERSION" >> $GITHUB_ENV || echo "VERSION=$(date +'%m.%d')" >> $GITHUB_ENV
 
     - name: Clone source code
       working-directory: /workdir
@@ -144,16 +145,15 @@ jobs:
 
     - name: Organize files
       id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        mkdir firmware && find openwrt/bin/targets/*/*/ -maxdepth 1 \
-        -name "*combined*" \
-        -or -name "*sysupgrade*" \
-        -or -name "sha256sums" \
-        | xargs -i mv -f {} ./firmware/
+        mkdir firmware
+        mv -f openwrt/bin/targets/*/*/{*combined*,*sysupgrade*} ./firmware/ 2>/dev/null || true
         cp openwrt/.config  ./firmware/${{matrix.target}}.config
+        cp openwrt/build_dir/target-*/linux-*/linux-*/.config ./firmware/${{matrix.target}}_kernel.config
         cd firmware
-        echo ${{ env.date4 }} > version.txt
+        echo "${{ env.VERSION }}.$(date +'%Y')" > version.txt
+        echo $md5 >> version.txt
+        echo $REPO_BRANCH >> version.txt     
         mv sha256sums ${{matrix.target}}_sha256sums
         rename -v "s/^openwrt/${{ env.date3 }}-Lean/" *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
@@ -164,7 +164,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: ${{ env.date3 }} _Lean
+        name: ${{ env.date3 }}_Lean
         path: ${{ env.FIRMWARE }}
 
     - name: Upload firmware to cowtransfer
@@ -203,7 +203,7 @@ jobs:
       with:
         files: "${{ env.FIRMWARE }}/*"
         name: ${{ env.date2 }} ${{matrix.target}}
-        tag_name: ${{ env.date3 }}_${{matrix.target}}
+        tag_name: ${{ env.date }}_${{matrix.target}}
         body_path: release.txt
 
     - name: Delete workflow runs
