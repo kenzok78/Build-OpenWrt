@@ -208,7 +208,7 @@ jobs:
       with:
         files: "${{ env.FIRMWARE }}/*"
         name: ${{ env.date2 }} ${{matrix.target}}
-        tag_name: ${{ env.date }}_${{matrix.target}}
+        tag_name: ${{ env.date }} ${{matrix.target}}
         body_path: release.txt
 
     - name: Delete workflow runs
