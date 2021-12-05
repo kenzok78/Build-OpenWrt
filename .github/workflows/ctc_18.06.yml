@@ -248,8 +248,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         files: "${{ env.FIRMWARE }}/*"
-        name: ${{ env.date2 }} ctc_18.06
-        tag_name: ${{ env.date }} ctc_18.06
+        name: ${{ env.date2 }}
+        tag_name: ${{ env.date }}
         body_path: release.txt
 
     - name: Delete workflow runs
