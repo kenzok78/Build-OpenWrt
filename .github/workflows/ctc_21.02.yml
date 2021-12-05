@@ -44,7 +44,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     
-    name: Build ${{matrix.target}}
+    name: Build ctc_21.02
     strategy:
       fail-fast: false
       matrix:
@@ -160,12 +160,12 @@ jobs:
         -or -name "*sysupgrade*" \
         -or -name "sha256sums" \
         | xargs -i mv -f {} ./firmware/
-        cp openwrt/.config  ./firmware/${{matrix.target}}.config
+        cp openwrt/.config  ./firmware/ctc_21.02.config
         cd firmware
         echo "v.${{ env.date4 }}" > version.txt
         echo $md5 >> version.txt
         echo $REPO_BRANCH >> version.txt     
-        mv sha256sums ${{matrix.target}}_sha256sums
+        mv sha256sums ctc_21.02_sha256sums
         rename -v "s/^immortalwrt/${{ env.date4 }}-ctc_21.02/" *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
@@ -247,8 +247,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         files: "${{ env.FIRMWARE }}/*"
-        name: ${{ env.date2 }} ${{matrix.target}}
-        tag_name: ${{ env.date }} ${{matrix.target}}
+        name: ${{ env.date2 }} ctc_21.02
+        tag_name: ${{ env.date }} ctc_21.02
         body_path: release.txt
 
     - name: Delete workflow runs
