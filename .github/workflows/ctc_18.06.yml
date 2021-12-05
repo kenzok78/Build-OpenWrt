@@ -210,8 +210,7 @@ jobs:
         context: .
         push: true
         tags: |
-          ${{ secrets.DOCKER_ID }}/openwrt-4p:ctc_18.06
-          ${{ env.DOCKERTAG }}        
+          ${{ secrets.DOCKER_ID }}/openwrt-4p:latest      
 
     - name: Upload firmware to cowtransfer
       id: cowtransfer
@@ -248,8 +247,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         files: "${{ env.FIRMWARE }}/*"
-        name: ${{ env.date2 }}
-        tag_name: ${{ env.date }}
+        name: ${{ env.date2 }} ctc_18.06
+        tag_name: ${{ env.date }}_ctc_18.06
         body_path: release.txt
 
     - name: Delete workflow runs

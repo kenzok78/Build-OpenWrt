@@ -259,8 +259,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         files: "${{ env.FIRMWARE }}/*"
-        name: ${{ env.date2 }}
-        tag_name: ${{ env.date }}
+        name: ${{ env.date2 }} Lean
+        tag_name: ${{ env.date }}_Lean
         body_path: release.txt
 
     - name: Delete workflow runs
