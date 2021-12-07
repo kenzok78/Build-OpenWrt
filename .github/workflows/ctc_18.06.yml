@@ -44,11 +44,11 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     
-    name: Build ctc_18.06
+    name: Build ${{matrix.target}}
     strategy:
       fail-fast: false
       matrix:
-        target: ["${{ github.event.client_payload.target }}"]
+        target: [ctc_18.06]
         
     steps:
     - name: Checkout
@@ -156,18 +156,18 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        mkdir firmware && find openwrt/bin/targets/*/*/ -maxdepth 1 \
-        -name "*combined*" \
-        -or -name "*sysupgrade*" \
-        -or -name "sha256sums" \
-        | xargs -i mv -f {} ./firmware/
-        cp openwrt/.config  ./firmware/ctc_18.06.config
+        mkdir firmware
+        mv -f openwrt/bin/targets/*/*/{*combined*,*sysupgrade*} ./firmware/ 2>/dev/null || true
+        cp openwrt/.config  ./firmware/${{matrix.target}}.config
+        cp openwrt/build_dir/target-*/linux-*/linux-*/.config ./firmware/${{matrix.target}}_kernel.config
         cd firmware
-        echo "v.${{ env.date4 }}" > version.txt
+        echo "${{ env.VERSION }}.$(date +'%Y')" > version.txt
+        rename -v "s/^openwrt/${{ env.VERSION }}-openwrt/" *
+        rename -v "s/friendlyarm_//" *gz
+        md5=$((md5sum *squashfs-sysupgrade* || md5sum *squashfs-combined-efi*) | awk '{print $1}') 2>/dev/null
         echo $md5 >> version.txt
         echo $REPO_BRANCH >> version.txt     
-        mv sha256sums ctc_18.06_sha256sums
-        rename -v "s/^immortalwrt/${{ env.date4 }}-ctc_18.06/" *
+        mv sha256sums ${{matrix.target}}_sha256sums
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
         
@@ -180,14 +180,25 @@ jobs:
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
         REMOTE_USER: root
-        TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/op/firmware/ctc_18.06/"         
+        TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/op/firmware/${{matrix.target}}/"         
       
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: ${{ env.date4 }}_ctc_18.06
+        name: ${{ env.VERSION }} ${{matrix.target}}
         path: ${{ env.FIRMWARE }}
+        
+    - name: Upload firmware to release
+      uses: softprops/action-gh-release@v1
+      if: steps.tag.outputs.status == 'success' && !cancelled()
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      with:
+        files: "${{ env.FIRMWARE }}/*"
+        name: ${{ env.date2 }} ${{matrix.target}}
+        tag_name: ${{ env.date }}_${{matrix.target}}
+        body_path: release.txt        
         
     - name: Set Up Docker Buildx
       uses: docker/setup-buildx-action@master
@@ -210,7 +221,8 @@ jobs:
         context: .
         push: true
         tags: |
-          ${{ secrets.DOCKER_ID }}/openwrt-4p:latest      
+          ${{ secrets.DOCKER_ID }}/openwrt-4p:${{matrix.target}}
+          ${{ env.DOCKERTAG }}    
 
     - name: Upload firmware to cowtransfer
       id: cowtransfer
@@ -239,17 +251,6 @@ jobs:
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
-
-    - name: Upload firmware to release
-      uses: softprops/action-gh-release@v1
-      if: steps.tag.outputs.status == 'success' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-      with:
-        files: "${{ env.FIRMWARE }}/*"
-        name: ${{ env.date2 }} ctc_18.06
-        tag_name: ${{ env.date }}_ctc_18.06
-        body_path: release.txt
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main

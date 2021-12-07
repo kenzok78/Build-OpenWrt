@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Lean
+name: ${{matrix.target}}
 
 on:
   repository_dispatch:
@@ -44,11 +44,11 @@ jobs:
   build:
     runs-on: ubuntu-20.04
 
-    name: Build Lean
+    name: Build ${{matrix.target}}
     strategy:
       fail-fast: false
       matrix:
-        target: ["${{ github.event.client_payload.target }}"]
+        target: [Lean]
 
     steps:
     - name: Checkout
@@ -106,7 +106,7 @@ jobs:
       
     - name: Openwrt AutoUpdate
       run: |
-        TEMP=v.${{ env.date4 }}
+        TEMP=${{ env.date4 }}
         echo "RELEASE_TAG=$TEMP" >> $GITHUB_ENV
         #required>>add "DISTRIB_GITHUB" to "zzz-default-settings"
         sed -i "/DISTRIB_DESCRIPTION=/a\sed -i '/DISTRIB_GITHUB/d' /etc/openwrt_release" openwrt/package/lean/default-settings/files/zzz-default-settings
@@ -137,7 +137,7 @@ jobs:
       run: |
         cd openwrt
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
-        cp -f feeds/smpackage/diy/Leandiffconfig .config && make defconfig
+        cp -f feeds/smpackage/diy/${{matrix.target}}diffconfig .config && make defconfig
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         make download -j8
@@ -167,18 +167,18 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        mkdir firmware && find openwrt/bin/targets/*/*/ -maxdepth 1 \
-        -name "*combined*" \
-        -or -name "*sysupgrade*" \
-        -or -name "sha256sums" \
-        | xargs -i mv -f {} ./firmware/
-        cp openwrt/.config  ./firmware/Lean.config
+        mkdir firmware
+        mv -f openwrt/bin/targets/*/*/{*combined*,*sysupgrade*} ./firmware/ 2>/dev/null || true
+        cp openwrt/.config  ./firmware/${{matrix.target}}.config
+        cp openwrt/build_dir/target-*/linux-*/linux-*/.config ./firmware/${{matrix.target}}_kernel.config
         cd firmware
-        echo "v.${{ env.date4 }}" > version.txt
+        echo "${{ env.VERSION }}.$(date +'%Y')" > version.txt
+        rename -v "s/^openwrt/${{ env.VERSION }}-openwrt/" *
+        rename -v "s/friendlyarm_//" *gz
+        md5=$((md5sum *squashfs-sysupgrade* || md5sum *squashfs-combined-efi*) | awk '{print $1}') 2>/dev/null
         echo $md5 >> version.txt
         echo $REPO_BRANCH >> version.txt     
-        mv sha256sums Lean_sha256sums
-        rename -v "s/^openwrt/${{ env.date4 }}-Lean/" *
+        mv sha256sums ${{matrix.target}}_sha256sums
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
       
@@ -191,13 +191,13 @@ jobs:
         REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
         REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
         REMOTE_USER: root
-        TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/op/firmware/Lean/"         
+        TARGET: "/www/wwwroot/${{ secrets.REMOTE_HOST }}/op/firmware/${{matrix.target}}/"         
       
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: ${{ env.date4 }}_Lean
+        name: ${{ env.VERSION }} ${{matrix.target}}
         path: ${{ env.FIRMWARE }}
         
     - name: Set Up Docker Buildx
@@ -221,7 +221,7 @@ jobs:
         context: .
         push: true
         tags: |
-          ${{ secrets.DOCKER_ID }}/openwrt-4p:Lean
+          ${{ secrets.DOCKER_ID }}/openwrt-4p:${{matrix.target}}
           ${{ env.DOCKERTAG }}
 
     - name: Upload firmware to cowtransfer
@@ -259,8 +259,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
       with:
         files: "${{ env.FIRMWARE }}/*"
-        name: ${{ env.date2 }} Lean
-        tag_name: ${{ env.date }}_Lean
+        name: ${{ env.date2 }} ${{matrix.target}}
+        tag_name: ${{ env.date }}_${{matrix.target}}
         body_path: release.txt
 
     - name: Delete workflow runs
