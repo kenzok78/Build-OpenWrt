@@ -180,6 +180,7 @@ jobs:
         echo $REPO_BRANCH >> version.txt     
         mv sha256sums ${{matrix.target}}_sha256sums
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+        echo "DOCKERTAG=${{ secrets.DOCKER_ID }}/openwrt-4p:latest" >> $GITHUB_ENV
         echo "::set-output name=status::success"
       
     - name: Deploy files to server
