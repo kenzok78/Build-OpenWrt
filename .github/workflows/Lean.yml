@@ -186,7 +186,7 @@ jobs:
       if: env.UPLOAD_FIRMWARE_FOR_ARTIFACT == 'true'
       with:
         name: ${{ env.VERSION }} ${{matrix.target}}
-        path: ${{ env.FIRMWARE }} }}
+        path: ${{ env.FIRMWARE }}
         
     - name: Set Up Docker Buildx
       uses: docker/setup-buildx-action@master
