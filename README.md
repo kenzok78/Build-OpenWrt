@@ -20,7 +20,7 @@
 [![AutoBuild][12]][13]
 
 <a href="https://t.me/joinchat/JjxmyRZZXJWb74I-sCrryA" target="_blank">Telegram</a>
-
+<img src="https://v1.jinrishici.com/all.svg?font-size=18&spacing=4">
 #### 源码来源：
 [![Lean](https://img.shields.io/badge/package-Lean-red.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede)
  [![Lienol](https://img.shields.io/badge/passwall-openwrt-blueviolet.svg?style=flat&logo=appveyor)](https://github.com/xiaorouji/openwrt-passwall) 
