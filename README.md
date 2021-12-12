@@ -1,5 +1,5 @@
 #### Build-OpenWrt
-<small><img src="https://v1.jinrishici.com/all.svg?font-size=18&spacing=4"></small>
+<img src="https://v1.jinrishici.com/all.svg?font-size=18&spacing=4">
 [1]: https://img.shields.io/badge/license-GPLV2-brightgreen.svg
 [2]: /LICENSE
 [3]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg
