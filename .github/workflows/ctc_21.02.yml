@@ -82,7 +82,7 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        git clone $REPO_URL -b ${{matrix.target}} openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         
     - name: Cache
@@ -165,12 +165,11 @@ jobs:
         echo $md5 >> version.txt
         rename -v "s/^immortalwrt-x86-64-generic-squashfs-combined/${{ env.date4 }}-${{matrix.target}}/" *
         rename -v "s/^immortalwrt-x86-64-generic-squashfs-rootfs/openwrt-x86-64-generic-squashfs-rootfs/" *
+        rename -v "s/friendlyarm_//" *gz
         echo $md5 >> version.txt
-        echo $REPO_BRANCH >> version.txt     
+        echo ${{matrix.target}} >> version.txt     
         rm -rf sha256sums
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "DOCKERTAG=${{ secrets.DOCKER_ID }}/openwrt-4p:latest" >> $GITHUB_ENV
-        echo "::set-output name=status::success"
       
     - name: Deploy files to server
       uses: easingthemes/ssh-deploy@main
