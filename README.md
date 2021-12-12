@@ -1,5 +1,4 @@
 #### Build-OpenWrt
-<img src="https://v1.jinrishici.com/all.svg?font-size=18&spacing=4">
 [1]: https://img.shields.io/badge/license-GPLV2-brightgreen.svg
 [2]: /LICENSE
 [3]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg
@@ -22,7 +21,7 @@
 
 <a href="https://t.me/joinchat/JjxmyRZZXJWb74I-sCrryA" target="_blank">Telegram</a>
 
-
+<img src="https://v1.jinrishici.com/all.svg?font-size=18&spacing=4">
 
 #### 源码来源：
 [![Lean](https://img.shields.io/badge/package-Lean-red.svg?style=flat&logo=appveyor)](https://github.com/coolsnowwolf/lede)
