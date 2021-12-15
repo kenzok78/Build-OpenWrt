@@ -163,7 +163,7 @@ jobs:
         echo "${{ env.VERSION }}.$(date +'%Y')" > version.txt
         md5=$((md5sum *squashfs-sysupgrade* || md5sum *squashfs-combined-efi*) | awk '{print $1}') 2>/dev/null
         echo $md5 >> version.txt
-        rename -v "s/^openwrt-x86-generic-generic-squashfs-combined/${{ env.date4 }}-${{matrix.target}}/" * || true
+        rename -v "s/^openwrt/${{ env.date4 }}-openwrt/" * || true
         rename -v "s/friendlyarm_//" *gz || true
         echo $md5 >> version.txt
         echo ${{matrix.target}} >> version.txt     

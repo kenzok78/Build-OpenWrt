@@ -22,7 +22,7 @@ on:
     - cron: 0 10 * * SAT
 
 jobs:
-  jell:
+  kenzok78:
     runs-on: ubuntu-latest
 
     steps:
