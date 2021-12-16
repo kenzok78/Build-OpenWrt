@@ -206,7 +206,7 @@ jobs:
       if: env.DOCKER_ID && env.DOCKER_PASSWD && ! contains(github.event.action, 'noser')
       with:
         platforms: ${{ env.ARCH }}
-        file: Dockerfile
+        file: $GITHUB_WORKSPACE/Dockerfile
         context: .
         push: true
         tags: |
