@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: ctc-21.02
+name: openwrt_21.02
 
 on:
   repository_dispatch:
@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ctc_21.02]
+        target: [21]
 
     steps:
     - name: Checkout
@@ -123,8 +123,8 @@ jobs:
       id: package
       run: |
         cd openwrt
-        cp -f feeds/smpackage/diy/default-settings package/emortal/default-settings/files/zzz-default-settings
-        cp -f feeds/smpackage/diy/banner package/emortal/default-settings/files/openwrt_banner
+        cp -f feeds/smpackage/diy/default-settings package/emortal/default-settings/files/99-default-settings
+        cp -f feeds/smpackage/diy/banner package/emortal/default-settings/files/banner
         cp -f feeds/smpackage/diy/21diffconfig .config && make defconfig  
         ./scripts/feeds update -a
         ./scripts/feeds install -a

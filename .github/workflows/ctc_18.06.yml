@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: ctc-18.06
+name: openwrt-18.06-k5.4
 
 on:
   repository_dispatch:
@@ -21,7 +21,7 @@ on:
 
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: openwrt-18.06
+  REPO_BRANCH: openwrt-18.06-k5.4
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: 18.config
   DIY_P1_SH: diy-part1.sh
@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ctc_18.06]
+        target: [ctc]
         
     steps:
     - name: Checkout
@@ -124,8 +124,8 @@ jobs:
       run: |
         cd openwrt
         git clone https://github.com/kenzok78/jeii package/jeii
-        cp -f package/jeii/commit/default-settings package/emortal/default-settings/files/zzz-default-settings
-        cp -f package/jeii/commit/banner package/emortal/default-settings/files/openwrt_banner
+        cp -f package/jeii/commit/default-settings package/emortal/default-settings/files/99-default-settings
+        cp -f package/jeii/commit/banner package/emortal/default-settings/files/banner
         cp -f package/jeii/commit/ctcdiffconfig .config && make defconfig
         ./scripts/feeds update -a
         ./scripts/feeds install -a
