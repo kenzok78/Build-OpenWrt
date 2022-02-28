@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [21]
+        target: [ctc-21.02]
 
     steps:
     - name: Checkout
