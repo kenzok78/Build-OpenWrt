@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ctc-18.06]
+        target: [ctc_18.06]
         
     steps:
     - name: Checkout
