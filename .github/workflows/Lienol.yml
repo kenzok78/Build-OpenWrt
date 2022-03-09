@@ -125,10 +125,11 @@ jobs:
         cd openwrt
         cp -f feeds/smpackage/diy/zzz-default-settings package/default-settings/files/zzz-default-settings
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
+        sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner
         cp -f feeds/smpackage/diy/${{matrix.target}}diffconfig .config && make defconfig
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        make download -j8
+        make download -j$(($(nproc)+1))
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
