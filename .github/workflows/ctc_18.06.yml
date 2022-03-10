@@ -127,7 +127,7 @@ jobs:
         cp -f package/jeii/commit/default-settings package/emortal/default-settings/files/99-default-settings
         cp -f package/jeii/commit/banner package/emortal/default-settings/files/banner
         sed -i 's/%D %V, %C/openwrt Mar by kenzo/g' package/emortal/default-settings/files/openwrt_banner
-        cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
+        cp -f package/jeii/commit/banner package/base-files/files/etc/banner
         sed -i 's/%D %V, %C/openwrt Mar by kenzo/g' package/base-files/files/etc/banner
         cp -f package/jeii/commit/ctcdiffconfig .config && make defconfig
         ./scripts/feeds update -a
