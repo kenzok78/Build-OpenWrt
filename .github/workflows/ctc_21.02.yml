@@ -111,15 +111,6 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
-        cd openwrt        
-        cp -f feeds/smpackage/diy/default-settings package/emortal/default-settings/files/99-default-settings
-        cp -f feeds/smpackage/diy/banner package/emortal/default-settings/files/openwrt_banner
-        sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/emortal/default-settings/files/openwrt_banner
-        cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
-        sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner
-        cp -f feeds/smpackage/diy/21diffconfig .config
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
 
     - name: SSH connection to Actions
       uses: kenzok78/debugger-action@master
@@ -131,9 +122,17 @@ jobs:
     - name: Download package
       id: package
       run: |
-        cd openwrt       
-        make defconfig
-        make download -j8
+        cd openwrt
+        git clone https://github.com/kenzok78/jeii package/jeii
+        cp -f package/jeii/commit/default-settings package/emortal/default-settings/files/99-default-settings
+        cp -f package/jeii/commit/banner package/emortal/default-settings/files/banner
+        sed -i 's/%D %V, %C/openwrt Mar by kenzo/g' package/emortal/default-settings/files/openwrt_banner
+        cp -f package/jeii/commit/banner package/base-files/files/etc/banner
+        sed -i 's/%D %V, %C/openwrt Mar by kenzo/g' package/base-files/files/etc/banner
+        cp -f package/jeii/commit/21diffconfig .config && make defconfig
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        make download -j$(($(nproc)+1))
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
