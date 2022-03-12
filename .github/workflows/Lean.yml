@@ -14,10 +14,10 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
-      ssh:
-        description: 'SSH connection to Actions'
+      version:
+        description: 'Version'
         required: false
-        default: 'false'
+        default: ''
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -130,10 +130,7 @@ jobs:
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
         sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner        
         cp -f feeds/smpackage/diy/${{matrix.target}}diffconfig .config && make defconfig
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
-        make download -j$(($(nproc)+1))
-        find dl -size -1024c -exec ls -l {} \;
+        make download -j8
         find dl -size -1024c -exec rm -f {} \;
 
     - name: Compile the firmware
