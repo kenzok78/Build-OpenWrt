@@ -120,14 +120,14 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    - name: Download package
+    - name: Download package ${{matrix.target}}
       id: package
       run: |
         cd openwrt
         cp -f feeds/smpackage/diy/default-settings package/lean/default-settings/files/zzz-default-settings
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
         sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner        
-        cp -f feeds/smpackage/diy/${{matrix.target}}diffconfig .config && make defconfig
+        cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
         make download -j8
         find dl -size -1024c -exec rm -f {} \;
 
