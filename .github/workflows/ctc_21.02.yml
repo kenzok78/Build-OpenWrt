@@ -23,7 +23,7 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-21.02
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: 21.config
+  CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
@@ -123,15 +123,13 @@ jobs:
       id: package
       run: |
         cd openwrt
-        git clone https://github.com/kenzok78/jeii package/jeii
-        cp -f package/jeii/commit/default-settings package/emortal/default-settings/files/99-default-settings
-        cp -f package/jeii/commit/banner package/emortal/default-settings/files/banner
+        cp -f feeds/smpackage/diy/default-settings package/emortal/default-settings/files/99-default-settings
+        cp -f feeds/smpackage/diy/banner package/emortal/default-settings/files/banner
         sed -i 's/%D %V, %C/openwrt Mar by kenzo/g' package/emortal/default-settings/files/openwrt_banner
-        cp -f package/jeii/commit/banner package/base-files/files/etc/banner
-        sed -i 's/%D %V, %C/openwrt Mar by kenzo/g' package/base-files/files/etc/banner
-        cp -f package/jeii/commit/${{matrix.target}}.config .config && make defconfig
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
+        cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
+        sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner
+        cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
+        make defconfig
         make download -j$(($(nproc)+1))
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
