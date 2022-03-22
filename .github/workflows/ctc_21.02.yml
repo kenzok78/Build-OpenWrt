@@ -129,7 +129,7 @@ jobs:
         sed -i 's/%D %V, %C/openwrt Mar by kenzo/g' package/emortal/default-settings/files/openwrt_banner
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
         sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner
-        cp -f package/smpackage/diy/prereq-build.mk include/prereq-build.mk
+        cp -f feeds/smpackage/diy/prereq-build.mk include/prereq-build.mk
         cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
         make defconfig
         make download -j$(($(nproc)+1))
