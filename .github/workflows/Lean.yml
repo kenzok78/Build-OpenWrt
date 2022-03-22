@@ -126,7 +126,8 @@ jobs:
         cd openwrt
         cp -f feeds/smpackage/diy/default-settings package/lean/default-settings/files/zzz-default-settings
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
-        sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner        
+        sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner 
+        cp -f package/jeii/diy/prereq-build.mk include/prereq-build.mk        
         cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
         make defconfig
         make download -j$(($(nproc)+1))
