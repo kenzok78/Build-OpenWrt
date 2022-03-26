@@ -85,13 +85,7 @@ jobs:
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt 
-        
-    - name: Cache
-      uses: klever1988/cachewrtbuild@main
-      with:
-        ccache: 'true'
-        prefix: ${{ github.workspace }}/openwrt        
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt        
 
     - name: Load custom feeds
       run: |
@@ -128,13 +122,20 @@ jobs:
         cp -f feeds/smpackage/diy/default-settings package/lean/default-settings/files/zzz-default-settings
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
         sed -i 's/v$date1/mar/g' package/lean/default-settings/files/zzz-default-settings
-        sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner 
+        sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner
+        cp -f feeds/smpackage/diy/index_x86.htm package/lean/autocore/files/x86/index.htm
         patch -p1 < "feeds/smpackage/diy/patches/prereq-build_new.patch"       
         cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
         make defconfig
         make download -j$(($(nproc)+1))
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
+
+    - name: Cache
+      uses: klever1988/cachewrtbuild@main
+      with:
+        ccache: 'true'
+        prefix: ${{ github.workspace }}/openwrt
 
     - name: Compile the firmware
       id: compile

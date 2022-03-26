@@ -77,20 +77,14 @@ jobs:
         echo "date4=$(date +'%m.%d.%H')" >> $GITHUB_ENV
         echo "DOCKERTAG=${{ secrets.DOCKER_ID }}/openwrt-4p:latest" >> $GITHUB_ENV
         VERSION="$(echo "${{github.event.action}}" | grep -Eo " [0-9.]+" | sed -e 's/ //')" || true
-        [ "$VERSION" ] && echo "VERSION=$VERSION" >> $GITHUB_ENV || echo "VERSION=$(date +'%m.%d')" >> $GITHUB_ENV        
+        [ "$VERSION" ] && echo "VERSION=$VERSION" >> $GITHUB_ENV || echo "VERSION=$(date +'%m.%d')" >> $GITHUB_ENV       
 
     - name: Clone source code
       working-directory: /workdir
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt        
-        
-    - name: Cache
-      uses: klever1988/cachewrtbuild@main
-      with:
-        ccache: 'true'
-        prefix: ${{ github.workspace }}/openwrt        
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt      
 
     - name: Load custom feeds
       run: |
@@ -130,11 +124,18 @@ jobs:
         sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/emortal/default-settings/files/openwrt_banner
         sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner
         sed -i 's/v$date1/mar/g' package/emortal/default-settings/files/99-default-settings
+        cp -f feeds/smpackage/diy/index_x86.htm package/emortal/autocore/files/generic/index.htm
         cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
         make defconfig
         make download -j$(($(nproc)+1))
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
+
+    - name: Cache
+      uses: klever1988/cachewrtbuild@main
+      with:
+        ccache: 'true'
+        prefix: ${{ github.workspace }}/openwrt
 
     - name: Compile the firmware
       id: compile
@@ -168,7 +169,7 @@ jobs:
         md5=$((md5sum *squashfs-sysupgrade* || md5sum *squashfs-combined-efi*) | awk '{print $1}') 2>/dev/null
         echo $md5 >> version.txt
         rename -v "s/^immortalwrt/${{ env.date4 }}-openwrt/" * || true
-        rename -v "s/friendlyarm_//" *gz || true    
+        rename -v "s/friendlyarm_//" *gz || true  
         echo $md5 >> version.txt
         echo ${{matrix.target}} >> version.txt     
         rm -rf sha256sums
@@ -226,7 +227,7 @@ jobs:
         push: true
         tags: |
           ${{ secrets.DOCKER_ID }}/openwrt-4p:${{matrix.target}}
-          ${{ env.DOCKERTAG }}    
+          ${{ env.DOCKERTAG }}
 
     - name: Upload firmware to cowtransfer
       id: cowtransfer
