@@ -123,7 +123,8 @@ jobs:
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
         sed -i 's/v$date1/mar/g' package/lean/default-settings/files/zzz-default-settings
         sed -i 's/%D %V, %C/openwrt mar by kenzo/g' package/base-files/files/etc/banner
-        cp -f feeds/smpackage/diy/index_x86.htm package/lean/autocore/files/x86/index.htm     
+        cp -f feeds/smpackage/diy/index_x86.htm package/lean/autocore/files/x86/index.htm
+        patch -p1 < "feeds/smpackage/diy/patches/prereq-build_new.patch"
         cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
         make defconfig
         make download -j$(($(nproc)+1))
