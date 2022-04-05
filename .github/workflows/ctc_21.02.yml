@@ -121,6 +121,7 @@ jobs:
         cp -f feeds/smpackage/diy/default-settings package/emortal/default-settings/files/99-default-settings
         cp -f feeds/smpackage/diy/banner package/emortal/default-settings/files/banner
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
+        cp -Rf feeds/smpackage/diy/files/* files
         sed -i 's/%D %V, %C/openwrt April by kenzo/g' package/emortal/default-settings/files/openwrt_banner
         sed -i 's/%D %V, %C/openwrt April by kenzo/g' package/base-files/files/etc/banner
         sed -i 's/v$date1/April/g' package/emortal/default-settings/files/99-default-settings
