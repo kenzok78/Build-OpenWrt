@@ -125,7 +125,6 @@ jobs:
         sed -i 's/%D %V, %C/openwrt May by kenzo/g' package/emortal/default-settings/files/openwrt_banner
         sed -i 's/%D %V, %C/openwrt May by kenzo/g' package/base-files/files/etc/banner
         sed -i 's/v$date1/May/g' package/emortal/default-settings/files/99-default-settings
-        patch -p1 < "feeds/smpackage/diy/patches/prereq-build_new.patch"
         cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
         make defconfig
         make download -j$(($(nproc)+1))
