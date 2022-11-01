@@ -123,8 +123,8 @@ jobs:
         cp -f feeds/smpackage/diy/zzz-default-settings package/default-settings/files/zzz-default-settings
         cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
         cp -Rf feeds/smpackage/diy/files/* files
-        sed -i 's/v$date1/May/g' package/default-settings/files/zzz-default-settings
-        sed -i 's/%D %V, %C/openwrt May by kenzo/g' package/base-files/files/etc/banner
+        sed -i 's/v$date1/Nov/g' package/default-settings/files/zzz-default-settings
+        sed -i 's/%D %V, %C/openwrt Nov by kenzo/g' package/base-files/files/etc/banner
         cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
         make defconfig
         make download -j$(($(nproc)+1))
