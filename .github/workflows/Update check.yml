@@ -36,7 +36,7 @@ jobs:
       id: getHash
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH .
-        echo "::set-output name=commitHash::$(git rev-parse HEAD)"
+        echo "commitHash=$(git rev-parse HEAD)" >>$GITHUB_OUTPUT
 
     - name: Compare Commit Hash
       id: cacheHash
@@ -62,7 +62,7 @@ jobs:
 
     - name: Trigger build
       if: steps.cacheHash.outputs.cache-hit != 'true'
-      uses: peter-evans/repository-dispatch@v1
+      uses: peter-evans/repository-dispatch@main
       with:
         token: ${{ secrets.REPO_TOKEN }}
         event-type: ${{ env.date2 }} ${{ github.event.inputs.version }}
