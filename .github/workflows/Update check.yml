@@ -50,7 +50,7 @@ jobs:
       run: |
         echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
         
-    - name: 设置当前的日期
+    - name: set current date
       id: date
       run: |
         echo "date=$(date +'%Y.%m.%d-%H%M')" >> $GITHUB_ENV
