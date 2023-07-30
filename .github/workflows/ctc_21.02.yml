@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: openwrt_21.02
+name: openwrt_23.05
 
 on:
   repository_dispatch:
@@ -42,7 +42,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     
     name: Build ${{matrix.target}}
     strategy:
