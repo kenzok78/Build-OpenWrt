@@ -42,7 +42,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     
     name: Build ${{matrix.target}}
     strategy:
@@ -118,15 +118,12 @@ jobs:
       id: package
       run: |
         cd openwrt
-        cp -f feeds/smpackage/diy/default-settings package/emortal/default-settings/files/99-default-settings
-        cp -f feeds/smpackage/diy/banner package/emortal/default-settings/files/banner
-        cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
-        sed -i 's/%D %V, %C/openwrt Jan by kenzo/g' package/emortal/default-settings/files/openwrt_banner
-        sed -i 's/%D %V, %C/openwrt Jan by kenzo/g' package/base-files/files/etc/banner
-        sed -i 's/v$date1/Jan/g' package/emortal/default-settings/files/99-default-settings
-        cp -f feeds/smpackage/diy/index_x86.htm package/emortal/autocore/files/generic/index.htm
-        cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
-        make defconfig
+        cp -f feeds/smpackage/.github/diy/default-settings package/emortal/default-settings/files/99-default-settings
+        cp -f feeds/smpackage/.github/diy/banner package/emortal/default-settings/files/openwrt_banner
+        cp -f feeds/smpackage/.github/diy/banner package/base-files/files/etc/banner
+        cp -f feeds/smpackage/.github/diy/index_x86.htm package/emortal/autocore/files/generic/index.htm
+        sed -i "s/%D %V, %C/openwrt $(date +'%m.%d') by kenzo/g" package/base-files/files/etc/banner
+        cp -f feeds/smpackage/.github/diy/${{matrix.target}}.config .config && make defconfig
         make download -j$(($(nproc)+1))
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;

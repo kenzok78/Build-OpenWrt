@@ -21,7 +21,7 @@ on:
 
 env:
   REPO_URL: https://github.com/Lienol/openwrt
-  REPO_BRANCH: 21.02
+  REPO_BRANCH: 22.03
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
@@ -119,15 +119,15 @@ jobs:
       id: package
       run: |
         cd openwrt
-        rm -rf feeds/luci/themes/luci-theme-argon
+        rm -rf feeds/luci/themes/luci-theme-argon && rm -rf feeds/other/luci-app-adguardhome && rm -rf feeds/packages/net/adguardhome
+        rm -rf feeds/lienol/luci-app-fileassistant && rm -rf feeds/other/luci-app-dockerman && rm -rf feeds/packages/net/smartdns
+        cp -f feeds/smpackage/.github/diy/zzz-default-settings package/default-settings/files/zzz-default-settings
+        cp -f feeds/smpackage/.github/diy/banner package/base-files/files/etc/banner && rm -rf feeds/smpackage/upx
+        rm -rf feeds/smpackage/luci-theme-design && git clone -b js --single-branch https://github.com/gngpp/luci-theme-design feeds/smpackage/luci-theme-design
+        sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
+        sed -i "s/%D %V, %C/openwrt $(date +'%m.%d') by kenzo/g" package/base-files/files/etc/banner
         ./scripts/feeds update -a && ./scripts/feeds install -a
-        cp -f feeds/smpackage/diy/zzz-default-settings package/default-settings/files/zzz-default-settings
-        cp -f feeds/smpackage/diy/banner package/base-files/files/etc/banner
-        cp -Rf feeds/smpackage/diy/files/* files
-        sed -i 's/v$date1/Jan/g' package/default-settings/files/zzz-default-settings
-        sed -i 's/%D %V, %C/openwrt Jan by kenzo/g' package/base-files/files/etc/banner
-        cp -f feeds/smpackage/diy/${{matrix.target}}.config .config && make defconfig
-        make defconfig
+        cp -f feeds/smpackage/.github/diy/${{matrix.target}}.config .config && make defconfig
         make download -j$(($(nproc)+1))
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
