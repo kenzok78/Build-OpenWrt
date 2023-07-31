@@ -65,7 +65,7 @@ jobs:
       uses: peter-evans/repository-dispatch@main
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        event-type: ${{ env.date3 }} ${{ github.event.inputs.version }}
+        event-type: ${{ env.date4 }} ${{ github.event.inputs.version }}
  
 
     - name: Delete workflow runs
